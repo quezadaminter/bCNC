@@ -1574,6 +1574,54 @@ class ToolFrame(CNCRibbon.PageFrame):
 		lframe.grid_columnconfigure(2,weight=1)
 		lframe.grid_columnconfigure(3,weight=1)
 
+		lframe = LabelFrame(self, text=_("Tool Offset"), foreground="DarkBlue")
+		lframe.pack(side=TOP, fill=X)
+		
+		# --- Tool Set ---
+		row += 1
+		col = 0
+		Label(lframe, text=_("Tool #:")).grid(row=row, column=col, sticky=E)
+		col += 1
+		self.offsetTool = tkExtra.IntegerEntry(lframe, background="White", width=5)
+		self.offsetTool.grid(row=row, column=col, sticky=EW)
+		tkExtra.Balloon.set(self.offsetTool,
+				_("The tool that will receive the offset properties."))
+		self.addWidget(self.offsetTool)
+
+		# --- Tool offset position ---
+		row += 1
+		col = 0
+		Label(lframe, text=_("Offset:")).grid(row=row, column=col, sticky=E)
+		col += 1
+		self.offsetX = tkExtra.FloatEntry(lframe, background="White", width=5)
+		self.offsetX.grid(row=row, column=col, sticky=EW)
+		tkExtra.Balloon.set(self.probeX, _("Manual tool change offset MX location"))
+		self.addWidget(self.offsetX)
+
+		col += 1
+		self.offsetY = tkExtra.FloatEntry(lframe, background="White", width=5)
+		self.offsetY.grid(row=row, column=col, sticky=EW)
+		tkExtra.Balloon.set(self.offsetY, _("Manual tool change offset MY location"))
+		self.addWidget(self.offsetY)
+
+		col += 1
+		self.offsetZ = tkExtra.FloatEntry(lframe, background="White", width=5)
+		self.offsetZ.grid(row=row, column=col, sticky=EW)
+		tkExtra.Balloon.set(self.offsetZ, _("Manual tool change offset MZ location"))
+		self.addWidget(self.offsetZ)
+
+		col += 1
+		b = Button(lframe, text=_("get"),
+				command=self.getProbe,
+				padx=2, pady=1)
+		b.grid(row=row, column=col, sticky=EW)
+		tkExtra.Balloon.set(b, _("Get current gantry position as machine tool offset location"))
+		self.addWidget(b)
+
+		lframe.grid_columnconfigure(1,weight=1)
+		lframe.grid_columnconfigure(2,weight=1)
+		lframe.grid_columnconfigure(3,weight=1)
+
 		self.loadConfig()
 
 	#-----------------------------------------------------------------------
@@ -1583,6 +1631,11 @@ class ToolFrame(CNCRibbon.PageFrame):
 		Utils.setFloat("Probe", "toolchangex", self.changeX.get())
 		Utils.setFloat("Probe", "toolchangey", self.changeY.get())
 		Utils.setFloat("Probe", "toolchangez", self.changeZ.get())
+		
+		Utils.setFloat("Probe", "tooloffsetx", self.changeX.get())
+		Utils.setFloat("Probe", "tooloffsety", self.changeY.get())
+		Utils.setFloat("Probe", "tooloffsetz", self.changeZ.get())
+		Utils.setFloat("Probe", "tooloffsetTool",self.offsetTool.get())
 
 		Utils.setFloat("Probe", "toolprobex", self.probeX.get())
 		Utils.setFloat("Probe", "toolprobey", self.probeY.get())
@@ -1597,6 +1650,11 @@ class ToolFrame(CNCRibbon.PageFrame):
 		self.changeX.set(Utils.getFloat("Probe","toolchangex"))
 		self.changeY.set(Utils.getFloat("Probe","toolchangey"))
 		self.changeZ.set(Utils.getFloat("Probe","toolchangez"))
+
+		self.offsetX.set(Utils.getFloat("Probe","tooloffsetx"))
+		self.offsetY.set(Utils.getFloat("Probe","tooloffsety"))
+		self.offsetZ.set(Utils.getFloat("Probe","tooloffsetz"))
+		self.offsetTool.set(Utils.getFloat("Probe","tooloffsettool"))
 
 		self.probeX.set(Utils.getFloat("Probe","toolprobex"))
 		self.probeY.set(Utils.getFloat("Probe","toolprobey"))
